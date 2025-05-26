@@ -53,7 +53,8 @@ function draw() {
       }
     }
 
-    const [x, y] = lastPosition; // 使用上一次的位置
+    // 如果沒有偵測到手勢，保持圓在上一次的位置
+    const [x, y] = lastPosition;
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
