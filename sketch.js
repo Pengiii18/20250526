@@ -3,6 +3,7 @@ let facemesh;
 let predictions = [];
 let currentGesture = null; // 儲存當前手勢
 let defaultPosition = [320, 240]; // 預設中間位置
+let lastPosition = [320, 240]; // 儲存上一次圓的位置
 
 function setup() {
   createCanvas(640, 480).position(
@@ -30,26 +31,23 @@ function draw() {
     const keypoints = predictions[0].scaledMesh;
 
     // 根據手勢決定圓圈的位置
-    let x, y;
     const gesture = detectGesture(); // 偵測手勢
     if (gesture) {
       currentGesture = gesture; // 更新當前手勢
+
+      if (currentGesture === 'scissors') {
+        // 剪刀：左耳（第234點）
+        lastPosition = keypoints[234];
+      } else if (currentGesture === 'rock') {
+        // 石頭：右耳（第454點）
+        lastPosition = keypoints[454];
+      } else if (currentGesture === 'paper') {
+        // 布：額頭（第10點）
+        lastPosition = keypoints[10];
+      }
     }
 
-    if (currentGesture === 'scissors') {
-      // 剪刀：左耳（第234點）
-      [x, y] = keypoints[234];
-    } else if (currentGesture === 'rock') {
-      // 石頭：右耳（第454點）
-      [x, y] = keypoints[454];
-    } else if (currentGesture === 'paper') {
-      // 布：額頭（第10點）
-      [x, y] = keypoints[10];
-    } else {
-      // 預設：中間位置
-      [x, y] = defaultPosition;
-    }
-
+    const [x, y] = lastPosition; // 使用上一次的位置
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
