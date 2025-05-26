@@ -27,11 +27,33 @@ function draw() {
   if (predictions.length > 0) {
     const keypoints = predictions[0].scaledMesh;
 
-    // 只在第94點畫紅色圓
-    const [x, y] = keypoints[94];
+    // 根據手勢決定圓圈的位置
+    let x, y;
+    const gesture = detectGesture(); // 偵測手勢
+    if (gesture === 'scissors') {
+      // 剪刀：左耳（第234點）
+      [x, y] = keypoints[234];
+    } else if (gesture === 'rock') {
+      // 石頭：右耳（第454點）
+      [x, y] = keypoints[454];
+    } else if (gesture === 'paper') {
+      // 布：額頭（第10點）
+      [x, y] = keypoints[10];
+    } else {
+      // 預設：第94點
+      [x, y] = keypoints[94];
+    }
+
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
     ellipse(x, y, 100, 100);
   }
+}
+
+// 偵測手勢的函式
+function detectGesture() {
+  // 這裡可以加入手勢辨識邏輯，目前僅作為範例返回隨機手勢
+  const gestures = ['scissors', 'rock', 'paper'];
+  return random(gestures);
 }
