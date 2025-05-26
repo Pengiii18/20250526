@@ -4,6 +4,8 @@ let predictions = [];
 let currentGesture = null; // 儲存當前手勢
 let defaultPosition = [320, 240]; // 預設中間位置
 let lastPosition = [320, 240]; // 儲存上一次圓的位置
+let gestureBuffer = []; // 用於儲存最近的手勢
+const bufferSize = 10; // 緩衝區大小
 
 function setup() {
   createCanvas(640, 480).position(
@@ -31,19 +33,23 @@ function draw() {
     const keypoints = predictions[0].scaledMesh;
 
     // 根據手勢決定圓圈的位置
-    const gesture = detectGesture(); // 偵測手勢
+    const gesture = detectGesture(keypoints); // 傳入關鍵點進行手勢判斷
     if (gesture) {
-      currentGesture = gesture; // 更新當前手勢
+      gestureBuffer.push(gesture);
+      if (gestureBuffer.length > bufferSize) {
+        gestureBuffer.shift(); // 保持緩衝區大小
+      }
 
-      if (currentGesture === 'scissors') {
-        // 剪刀：左耳（第234點）
-        lastPosition = keypoints[234];
-      } else if (currentGesture === 'rock') {
-        // 石頭：右耳（第454點）
-        lastPosition = keypoints[454];
-      } else if (currentGesture === 'paper') {
-        // 布：額頭（第10點）
-        lastPosition = keypoints[10];
+      // 如果緩衝區內的手勢一致，才更新 currentGesture
+      if (gestureBuffer.every(g => g === gesture)) {
+        currentGesture = gesture;
+        if (currentGesture === 'scissors') {
+          lastPosition = keypoints[234]; // 左耳
+        } else if (currentGesture === 'rock') {
+          lastPosition = keypoints[454]; // 右耳
+        } else if (currentGesture === 'paper') {
+          lastPosition = keypoints[10]; // 額頭
+        }
       }
     }
 
@@ -56,8 +62,33 @@ function draw() {
 }
 
 // 偵測手勢的函式
-function detectGesture() {
-  // 這裡可以加入手勢辨識邏輯，目前僅作為範例返回隨機手勢或 null
-  const gestures = ['scissors', 'rock', 'paper', null];
-  return random(gestures);
+function detectGesture(keypoints) {
+  // 假設我們可以根據手的關鍵點來判斷手勢
+  // 以下為簡單的邏輯範例，需根據實際需求調整
+  if (isScissors(keypoints)) {
+    return 'scissors';
+  } else if (isRock(keypoints)) {
+    return 'rock';
+  } else if (isPaper(keypoints)) {
+    return 'paper';
+  }
+  return null;
+}
+
+// 判斷是否為剪刀
+function isScissors(keypoints) {
+  // TODO: 根據手部關鍵點的相對位置判斷是否為剪刀
+  return false; // 範例邏輯，需實現
+}
+
+// 判斷是否為石頭
+function isRock(keypoints) {
+  // TODO: 根據手部關鍵點的相對位置判斷是否為石頭
+  return false; // 範例邏輯，需實現
+}
+
+// 判斷是否為布
+function isPaper(keypoints) {
+  // TODO: 根據手部關鍵點的相對位置判斷是否為布
+  return false; // 範例邏輯，需實現
 }
