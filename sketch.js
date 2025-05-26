@@ -53,6 +53,10 @@ function draw() {
       }
     }
 
+    // 調試訊息：輸出緩衝區內容和當前手勢
+    console.log('Gesture Buffer:', gestureBuffer);
+    console.log('Current Gesture:', currentGesture);
+
     // 如果沒有偵測到手勢，保持圓在上一次的位置
     const [x, y] = lastPosition;
     noFill();
@@ -65,7 +69,6 @@ function draw() {
 // 偵測手勢的函式
 function detectGesture(keypoints) {
   // 假設我們可以根據手的關鍵點來判斷手勢
-  // 以下為簡單的邏輯範例，需根據實際需求調整
   if (isScissors(keypoints)) {
     return 'scissors';
   } else if (isRock(keypoints)) {
