@@ -35,29 +35,21 @@ function draw() {
     // 根據手勢決定圓圈的位置
     const gesture = detectGesture(keypoints); // 傳入關鍵點進行手勢判斷
     if (gesture) {
-      gestureBuffer.push(gesture);
-      if (gestureBuffer.length > bufferSize) {
-        gestureBuffer.shift(); // 保持緩衝區大小
-      }
-
-      // 如果緩衝區內的手勢一致，才更新 currentGesture
-      if (gestureBuffer.every(g => g === gesture)) {
-        currentGesture = gesture;
-        if (currentGesture === 'scissors') {
-          lastPosition = [keypoints[234][0], keypoints[234][1]]; // 左耳
-        } else if (currentGesture === 'rock') {
-          lastPosition = [keypoints[454][0], keypoints[454][1]]; // 右耳
-        } else if (currentGesture === 'paper') {
-          lastPosition = [keypoints[10][0], keypoints[10][1]]; // 額頭
-        }
+      currentGesture = gesture; // 立即更新當前手勢
+      if (currentGesture === 'scissors') {
+        lastPosition = [keypoints[234][0], keypoints[234][1]]; // 左耳
+      } else if (currentGesture === 'rock') {
+        lastPosition = [keypoints[454][0], keypoints[454][1]]; // 右耳
+      } else if (currentGesture === 'paper') {
+        lastPosition = [keypoints[10][0], keypoints[10][1]]; // 額頭
       }
     }
 
-    // 調試訊息：輸出緩衝區內容和當前手勢
-    console.log('Gesture Buffer:', gestureBuffer);
+    // 調試訊息：輸出當前手勢和圓的位置
     console.log('Current Gesture:', currentGesture);
+    console.log('Drawing Circle at:', lastPosition);
 
-    // 如果沒有偵測到手勢，保持圓在上一次的位置
+    // 繪製圓圈
     const [x, y] = lastPosition;
     noFill();
     stroke(255, 0, 0);
