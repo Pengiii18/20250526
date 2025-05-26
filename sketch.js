@@ -44,11 +44,11 @@ function draw() {
       if (gestureBuffer.every(g => g === gesture)) {
         currentGesture = gesture;
         if (currentGesture === 'scissors') {
-          lastPosition = keypoints[234]; // 左耳
+          lastPosition = [keypoints[234][0], keypoints[234][1]]; // 左耳
         } else if (currentGesture === 'rock') {
-          lastPosition = keypoints[454]; // 右耳
+          lastPosition = [keypoints[454][0], keypoints[454][1]]; // 右耳
         } else if (currentGesture === 'paper') {
-          lastPosition = keypoints[10]; // 額頭
+          lastPosition = [keypoints[10][0], keypoints[10][1]]; // 額頭
         }
       }
     }
