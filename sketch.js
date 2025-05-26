@@ -81,18 +81,58 @@ function detectGesture(keypoints) {
 
 // 判斷是否為剪刀
 function isScissors(keypoints) {
-  // TODO: 根據手部關鍵點的相對位置判斷是否為剪刀
-  return false; // 範例邏輯，需實現
+  // 假設剪刀手勢：食指和中指分開，其餘手指收攏
+  const indexFinger = keypoints[8]; // 食指尖端
+  const middleFinger = keypoints[12]; // 中指尖端
+  const ringFinger = keypoints[16]; // 無名指尖端
+  const pinkyFinger = keypoints[20]; // 小指尖端
+  const thumb = keypoints[4]; // 拇指尖端
+
+  const distanceIndexMiddle = dist(indexFinger[0], indexFinger[1], middleFinger[0], middleFinger[1]);
+  const distanceRingPinky = dist(ringFinger[0], ringFinger[1], pinkyFinger[0], pinkyFinger[1]);
+  const distanceThumbIndex = dist(thumb[0], thumb[1], indexFinger[0], indexFinger[1]);
+
+  return distanceIndexMiddle > 50 && distanceRingPinky < 30 && distanceThumbIndex < 30;
 }
 
 // 判斷是否為石頭
 function isRock(keypoints) {
-  // TODO: 根據手部關鍵點的相對位置判斷是否為石頭
-  return false; // 範例邏輯，需實現
+  // 假設石頭手勢：所有手指收攏
+  const indexFinger = keypoints[8];
+  const middleFinger = keypoints[12];
+  const ringFinger = keypoints[16];
+  const pinkyFinger = keypoints[20];
+  const thumb = keypoints[4];
+
+  const palmBase = keypoints[0]; // 手掌基部
+
+  return (
+    dist(indexFinger[0], indexFinger[1], palmBase[0], palmBase[1]) < 30 &&
+    dist(middleFinger[0], middleFinger[1], palmBase[0], palmBase[1]) < 30 &&
+    dist(ringFinger[0], ringFinger[1], palmBase[0], palmBase[1]) < 30 &&
+    dist(pinkyFinger[0], pinkyFinger[1], palmBase[0], palmBase[1]) < 30 &&
+    dist(thumb[0], thumb[1], palmBase[0], palmBase[1]) < 30
+  );
 }
 
 // 判斷是否為布
 function isPaper(keypoints) {
-  // TODO: 根據手部關鍵點的相對位置判斷是否為布
-  return false; // 範例邏輯，需實現
+  // 假設布手勢：所有手指伸直且分開
+  const indexFinger = keypoints[8];
+  const middleFinger = keypoints[12];
+  const ringFinger = keypoints[16];
+  const pinkyFinger = keypoints[20];
+  const thumb = keypoints[4];
+
+  const distanceIndexMiddle = dist(indexFinger[0], indexFinger[1], middleFinger[0], middleFinger[1]);
+  const distanceMiddleRing = dist(middleFinger[0], middleFinger[1], ringFinger[0], ringFinger[1]);
+  const distanceRingPinky = dist(ringFinger[0], ringFinger[1], pinkyFinger[0], pinkyFinger[1]);
+  const distanceThumbIndex = dist(thumb[0], thumb[1], indexFinger[0], indexFinger[1]);
+
+  return (
+    distanceIndexMiddle > 50 &&
+    distanceMiddleRing > 50 &&
+    distanceRingPinky > 50 &&
+    distanceThumbIndex > 50
+  );
 }
