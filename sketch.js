@@ -1,6 +1,8 @@
 let video;
 let facemesh;
 let predictions = [];
+let currentGesture = null; // 儲存當前手勢
+let defaultPosition = [320, 240]; // 預設中間位置
 
 function setup() {
   createCanvas(640, 480).position(
@@ -30,18 +32,22 @@ function draw() {
     // 根據手勢決定圓圈的位置
     let x, y;
     const gesture = detectGesture(); // 偵測手勢
-    if (gesture === 'scissors') {
+    if (gesture) {
+      currentGesture = gesture; // 更新當前手勢
+    }
+
+    if (currentGesture === 'scissors') {
       // 剪刀：左耳（第234點）
       [x, y] = keypoints[234];
-    } else if (gesture === 'rock') {
+    } else if (currentGesture === 'rock') {
       // 石頭：右耳（第454點）
       [x, y] = keypoints[454];
-    } else if (gesture === 'paper') {
+    } else if (currentGesture === 'paper') {
       // 布：額頭（第10點）
       [x, y] = keypoints[10];
     } else {
-      // 預設：第94點
-      [x, y] = keypoints[94];
+      // 預設：中間位置
+      [x, y] = defaultPosition;
     }
 
     noFill();
@@ -53,7 +59,7 @@ function draw() {
 
 // 偵測手勢的函式
 function detectGesture() {
-  // 這裡可以加入手勢辨識邏輯，目前僅作為範例返回隨機手勢
-  const gestures = ['scissors', 'rock', 'paper'];
+  // 這裡可以加入手勢辨識邏輯，目前僅作為範例返回隨機手勢或 null
+  const gestures = ['scissors', 'rock', 'paper', null];
   return random(gestures);
 }
